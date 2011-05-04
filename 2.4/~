@@ -1,0 +1,59 @@
+#include<string>
+#include<vector>
+#include<iostream>
+using namespace std;
+
+class Algrid
+{
+	public:
+		vector <string> makeProgram(vector <string>);
+};
+
+vector <string> Algrid::makeProgram(vector <string> output)
+{
+	int n=output.size();
+	int len=output[1].length();
+	vector <string> ans;
+	for(int i=1; i<n; i++)
+	{
+		int tot=0;
+		string now[100000];
+		for(int p=0; p<1<<len; p++)
+		{
+			int x=p;
+			string ss="";
+			for(int j=0; j<len; j++)
+			{
+				ss=ss+(x%2==0?'B':'W');
+				x/=2;
+			}
+			cout<<ss;
+			string tmp=ss;
+			for(int j=1; j<len; j++)
+			{
+				if(output[i-1][j-1]=='W' && output[i-1][j]=='W') continue;
+				if(output[i-1][j-1]=='B' && output[i-1][j]=='B')
+				{
+					char ch=ss[j-1]; ss[j-1]=ss[j]; ss[j]=ch;
+				}
+				if(output[i-1][j-1]=='W' && output[i-1][j]=='B')
+				{
+					ss[j-1]='W'; ss[j]='W';
+				}
+				if(output[i-1][j-1]=='B' && output[i-1][j]=='W')
+				{
+					ss[j-1]='B'; ss[j]='B';
+				}
+			}
+			if(output[i]==ss) now[tot++]=tmp;
+		}
+		if(tot==0)
+		{
+			vector <string> xx;
+			return xx;
+		}
+		sort(now,now+tot);
+		ans.push_back(now[0]);
+	}
+	return ans;
+}
